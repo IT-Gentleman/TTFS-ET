@@ -1,0 +1,22 @@
+dataset_type: mnist
+training_dataset_ratio: 1.0
+test_dataset_ratio: 1.0
+batch_size: 64
+epoch: 10
+lr_scheduler: False
+steps: 10
+single_gpu: 1
+path_dataset: /home/mwkim/jupyter/root/F-TTFS/dataset/
+path_result_image: /home/mwkim/jupyter/root/F-TTFS/result/image/
+path_result_model: /home/mwkim/jupyter/root/F-TTFS/result/model/
+path_result_loss: /home/mwkim/jupyter/root/F-TTFS/result/loss/
+path_result_accuracy: /home/mwkim/jupyter/root/F-TTFS/result/accuracy/
+path_result_meta: /home/mwkim/jupyter/root/F-TTFS/result/meta/
+pretrained: None
+latency_early_stopping: False
+latency_propagate_zero: False
+verbose: True
+notes: None
+
+status: SUCCESS
+Total elapsed time: 1423.799308 s

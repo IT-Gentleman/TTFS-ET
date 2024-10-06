@@ -6,9 +6,7 @@ DIRECTORY = current_file_path = Path(__file__).resolve()
 PATH_ROOT = str(DIRECTORY.parent.parent) + '/' #F-TTFS/
 PATH_DATASET = PATH_ROOT + 'dataset/'
 PATH_RESULT_ROOT = PATH_ROOT + 'result/'
-PATH_RESULT_IMAGE = PATH_RESULT_ROOT + 'image/'
 PATH_RESULT_MODEL = PATH_RESULT_ROOT + 'model/'
-PATH_RESULT_LOSS = PATH_RESULT_ROOT + 'loss/'
 PATH_RESULT_ACCURACY = PATH_RESULT_ROOT + 'accuracy/'
 PATH_RESULT_META = PATH_RESULT_ROOT + 'meta/'
 PATH_UTILITY = PATH_ROOT + 'utility/'
@@ -46,12 +44,6 @@ import time
 import traceback
 from types import SimpleNamespace
 from datetime import datetime
-#from utility.parser import *
-#from utility.statistic import *
-#from utility.common import *
-#from utility.preprocessing import *
-#from utility.synthesization import *
-#from utility.visualization import *
 
 
 def save_record_to_csv(path: str, record: list):
@@ -697,9 +689,7 @@ if __name__ == "__main__":
     parser.add_argument('--steps', type=int, default=10, help="Number of steps in SNN spike encoding. Must be greater than 1. (Default: 10)")
     parser.add_argument('--single_gpu', type=int, default=None, help="Enable singleGPU mode with GPU index. Disable to use parallel GPU or CPU(when GPU is unavailable). (Default: None)")
     parser.add_argument('--path_dataset', type=str, default=PATH_DATASET)
-    parser.add_argument('--path_result_image', type=str, default=PATH_RESULT_IMAGE)
     parser.add_argument('--path_result_model', type=str, default=PATH_RESULT_MODEL)
-    parser.add_argument('--path_result_loss', type=str, default=PATH_RESULT_LOSS)
     parser.add_argument('--path_result_accuracy', type=str, default=PATH_RESULT_ACCURACY)
     parser.add_argument('--path_result_meta', type=str, default=PATH_RESULT_META)
     parser.add_argument('--pretrained', type=str, default=None, help="Pretrained latency encoding weights path (Default: None)")
@@ -713,9 +703,7 @@ if __name__ == "__main__":
 
     # Sanity check; directory existence
     ensure_directory(args.path_dataset)
-    ensure_directory(args.path_result_image)
     ensure_directory(args.path_result_model)
-    ensure_directory(args.path_result_loss)
     ensure_directory(args.path_result_accuracy)
     ensure_directory(args.path_result_meta)
 
@@ -730,13 +718,10 @@ if __name__ == "__main__":
     paths = SimpleNamespace(
         dataset = args.path_dataset,
         meta = f'{args.path_result_meta}/{xid:03d}_meta_{args.dataset_type}.txt',
-        image = f'{args.path_result_image}/{xid:03d}_sample_{args.dataset_type}.png',
         model = f'{args.path_result_model}/{xid:03d}_model_{args.dataset_type}_latency.weights',
-        loss = f'{args.path_result_loss}/{xid:03d}__loss_{args.dataset_type}_latency.png',
         accuracy = f'{args.path_result_accuracy}/{xid:03d}_accuarcy_{args.dataset_type}_latency.png',
         accuracy_csv = args.path_result_accuracy + f'accuracy.csv',
         accuracy_summary_csv = args.path_result_accuracy + f'accuracy_summary.csv',
-        image_addable = f'{args.path_result_image}/{xid:03d}'
     )
 
     # Sanity check: Print meta data

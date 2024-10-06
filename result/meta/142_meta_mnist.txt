@@ -1,0 +1,21 @@
+dataset_type: mnist
+training_dataset_ratio: 1.0
+test_dataset_ratio: 1.0
+batch_size: 64
+epoch: 100
+beta: 0.95
+lr_scheduler: False
+steps: 10
+single_gpu: None
+path_dataset: /home/mwkim/F-TTFS/dataset/
+path_result_model: /home/mwkim/F-TTFS/result/model/
+path_result_accuracy: /home/mwkim/F-TTFS/result/accuracy/
+path_result_meta: /home/mwkim/F-TTFS/result/meta/
+pretrained: /home/mwkim/F-TTFS/result/model/000_model_mnist_latency.weights
+latency_early_stopping: True
+latency_propagate_zero: False
+verbose: True
+notes: None
+
+status: SUCCESS
+Total elapsed time: 10.932804 s

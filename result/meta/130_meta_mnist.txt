@@ -1,0 +1,39 @@
+dataset_type: mnist
+training_dataset_ratio: 1.0
+test_dataset_ratio: 1.0
+batch_size: 64
+epoch: 100
+beta: 0.95
+lr_scheduler: False
+steps: 10
+single_gpu: None
+path_dataset: /home/mwkim/F-TTFS/dataset/
+path_result_model: /home/mwkim/F-TTFS/result/model/
+path_result_accuracy: /home/mwkim/F-TTFS/result/accuracy/
+path_result_meta: /home/mwkim/F-TTFS/result/meta/
+pretrained: /home/mwkim/F-TTFS/result/model/000_model_mnist_latency.weights
+latency_early_stopping: False
+latency_propagate_zero: False
+verbose: True
+notes: None
+
+status: FAILED(Attempting to deserialize object on CUDA device 1 but torch.cuda.device_count() is 1. Please use torch.load with map_location to map your storages to an existing device.)  File "/home/mwkim/F-TTFS/experiment/evaluation.py", line 742, in <module>
+    main(args, paths)
+  File "/home/mwkim/F-TTFS/experiment/evaluation.py", line 634, in main
+    model.load_state_dict(torch.load(args.pretrained))
+  File "/home/mwkim/venv/lib/python3.10/site-packages/torch/serialization.py", line 1025, in load
+    return _load(opened_zipfile,
+  File "/home/mwkim/venv/lib/python3.10/site-packages/torch/serialization.py", line 1446, in _load
+    result = unpickler.load()
+  File "/home/mwkim/venv/lib/python3.10/site-packages/torch/serialization.py", line 1416, in persistent_load
+    typed_storage = load_tensor(dtype, nbytes, key, _maybe_decode_ascii(location))
+  File "/home/mwkim/venv/lib/python3.10/site-packages/torch/serialization.py", line 1390, in load_tensor
+    wrap_storage=restore_location(storage, location),
+  File "/home/mwkim/venv/lib/python3.10/site-packages/torch/serialization.py", line 390, in default_restore_location
+    result = fn(storage, location)
+  File "/home/mwkim/venv/lib/python3.10/site-packages/torch/serialization.py", line 265, in _cuda_deserialize
+    device = validate_cuda_device(location)
+  File "/home/mwkim/venv/lib/python3.10/site-packages/torch/serialization.py", line 256, in validate_cuda_device
+    raise RuntimeError('Attempting to deserialize object on CUDA device '
+
+Total elapsed time: 16.080974 s

@@ -45,6 +45,9 @@ import traceback
 from types import SimpleNamespace
 from datetime import datetime
 
+import simple_model
+import complex_model
+import reference_model
 
 def save_record_to_csv(path: str, record: list):
 
@@ -79,387 +82,6 @@ def visualize_confusion_matrix(pilot: bool, all_labels: list, all_predictions: l
         plt.tight_layout()
         plt.savefig(path)
 
-class defaultTTFS(nn.Module):
-    def __init__(self, input_channels=1, output_channels=10, beta=0.95, input_size=28):
-        super(defaultTTFS, self).__init__()
-        self.conv1 = nn.Conv2d(input_channels, 32, kernel_size=3, stride=1, padding=1)
-        self.lif1 = snn.Leaky(beta=beta, init_hidden=True)
-        self.pool = nn.MaxPool2d(2, 2)
-        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1)
-        self.lif2 = snn.Leaky(beta=beta, init_hidden=True)
-
-        # Compute the size after convolution and pooling layers
-        size_after_conv1 = input_size  # Since padding=1, stride=1, kernel_size=3
-        size_after_pool1 = size_after_conv1 // 2  # After first pooling
-        size_after_conv2 = size_after_pool1  # Conv layer maintains size
-        size_after_pool2 = size_after_conv2 // 2  # After second pooling
-        final_size = size_after_pool2
-
-        # Define fully connected layers with dynamic input size
-        self.fc1 = nn.Linear(64 * final_size * final_size, 100)
-        self.lif3 = snn.Leaky(beta=beta, init_hidden=True)
-        self.fc2 = nn.Linear(100, output_channels)
-        self.lif4 = snn.Leaky(beta=beta, init_hidden=True)
-
-    def forward(self, x):
-        self.lif1.init_leaky()
-        self.lif2.init_leaky()
-        self.lif3.init_leaky()
-        self.lif4.init_leaky()
-
-        num_steps = x.shape[0]
-        spk_out = []
-        
-        for step in range(num_steps):
-            x_t = x[step]
-            cur1 = self.conv1(x_t)
-            spk1= self.lif1(cur1)
-            spk1 = self.pool(spk1)
-            cur2 = self.conv2(spk1)
-            spk2 = self.lif2(cur2)
-            spk2 = self.pool(spk2)
-            spk2_flat = spk2.view(spk2.size(0), -1)
-            cur3 = self.fc1(spk2_flat)
-            spk3 = self.lif3(cur3)
-            cur4 = self.fc2(spk3)
-            spk4 = self.lif4(cur4)
-            spk_out.append(spk4)
-            
-        return torch.stack(spk_out)
-    
-class earlyTTFS(nn.Module):
-    def __init__(self, input_channels=1, output_channels=10, beta=0.95, input_size=28):
-        super(earlyTTFS, self).__init__()
-        self.conv1 = nn.Conv2d(input_channels, 32, kernel_size=3, stride=1, padding=1)
-        self.lif1 = snn.Leaky(beta=beta, init_hidden=True)
-        self.pool = nn.MaxPool2d(2, 2)
-        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1)
-        self.lif2 = snn.Leaky(beta=beta, init_hidden=True)
-
-        # Compute the size after convolution and pooling layers
-        size_after_conv1 = input_size  # Since padding=1, stride=1, kernel_size=3
-        size_after_pool1 = size_after_conv1 // 2  # After first pooling
-        size_after_conv2 = size_after_pool1  # Conv layer maintains size
-        size_after_pool2 = size_after_conv2 // 2  # After second pooling
-        final_size = size_after_pool2
-
-        # Define fully connected layers with dynamic input size
-        self.fc1 = nn.Linear(64 * final_size * final_size, 100)
-        self.lif3 = snn.Leaky(beta=beta, init_hidden=True)
-        self.fc2 = nn.Linear(100, output_channels)
-        self.lif4 = snn.Leaky(beta=beta, init_hidden=True)
-
-    def forward(self, x):
-        self.lif1.init_leaky()
-        self.lif2.init_leaky()
-        self.lif3.init_leaky()
-        self.lif4.init_leaky()
-
-        num_steps = x.shape[0]
-        spk_out = []
-        batch_size = x.size(1)
-        not_spiked = torch.ones(batch_size, dtype=torch.bool, device=x.device)
-        for step in range(num_steps):
-            #x_t = x[step].clone()
-            x_t = x[step]
-            cur1 = self.conv1(x_t)
-            spk1= self.lif1(cur1)
-            spk1 = self.pool(spk1)
-            cur2 = self.conv2(spk1)
-            spk2 = self.lif2(cur2)
-            spk2 = self.pool(spk2)
-            spk2_flat = spk2.view(spk2.size(0), -1)
-            cur3 = self.fc1(spk2_flat)
-            spk3 = self.lif3(cur3)
-            cur4 = self.fc2(spk3)
-            spk4 = self.lif4(cur4)
-            spk_out.append(spk4)
-            spiked_now = spk4.sum(dim=1) > 0
-            newly_spiked = spiked_now & not_spiked
-            not_spiked[newly_spiked] = False
-            if not not_spiked.any():
-                for _ in range(step + 1, num_steps):
-                    spk_out.append(torch.zeros_like(spk4))
-                break
-            
-        return torch.stack(spk_out)
-
-class zeroTTFS(nn.Module):
-    def __init__(self, input_channels=1, output_channels=10, beta=0.95, input_size=28):
-        super(zeroTTFS, self).__init__()
-        self.conv1 = nn.Conv2d(input_channels, 32, kernel_size=3, stride=1, padding=1)
-        self.lif1 = snn.Leaky(beta=beta, init_hidden=True)
-        self.pool = nn.MaxPool2d(2, 2)
-        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1)
-        self.lif2 = snn.Leaky(beta=beta, init_hidden=True)
-
-        # Compute the size after convolution and pooling layers
-        size_after_conv1 = input_size  # Since padding=1, stride=1, kernel_size=3
-        size_after_pool1 = size_after_conv1 // 2  # After first pooling
-        size_after_conv2 = size_after_pool1  # Conv layer maintains size
-        size_after_pool2 = size_after_conv2 // 2  # After second pooling
-        final_size = size_after_pool2
-
-        # Define fully connected layers with dynamic input size
-        self.fc1 = nn.Linear(64 * final_size * final_size, 100)
-        self.lif3 = snn.Leaky(beta=beta, init_hidden=True)
-        self.fc2 = nn.Linear(100, output_channels)
-        self.lif4 = snn.Leaky(beta=beta, init_hidden=True)
-
-    def forward(self, x):
-        self.lif1.init_leaky()
-        self.lif2.init_leaky()
-        self.lif3.init_leaky()
-        self.lif4.init_leaky()
-
-        num_steps = x.shape[0]
-        spk_out = []
-        batch_size = x.size(1)
-        not_spiked = torch.ones(batch_size, dtype=torch.bool, device=x.device)
-        for step in range(num_steps):
-            #x_t = x[step].clone()
-            x_t = x[step]
-            x_t[~not_spiked] = 0.0
-            #x_t = x_t * not_spiked.view(-1, 1, 1, 1).float()
-            cur1 = self.conv1(x_t)
-            spk1= self.lif1(cur1)
-            spk1 = self.pool(spk1)
-            cur2 = self.conv2(spk1)
-            spk2 = self.lif2(cur2)
-            spk2 = self.pool(spk2)
-            spk2_flat = spk2.view(spk2.size(0), -1)
-            cur3 = self.fc1(spk2_flat)
-            spk3 = self.lif3(cur3)
-            cur4 = self.fc2(spk3)
-            spk4 = self.lif4(cur4)
-            spk_out.append(spk4)
-            #spiked_now = spk4.sum(dim=1) > 0
-            #newly_spiked = spiked_now & not_spiked
-            newly_spiked = (spk4.sum(dim=1)>0) & not_spiked
-            not_spiked[newly_spiked] = False
-            
-        return torch.stack(spk_out)
-    
-class earlyzeroTTFS(nn.Module):
-    def __init__(self, input_channels=1, output_channels=10, beta=0.95, input_size=28):
-        super(earlyzeroTTFS, self).__init__()
-        self.conv1 = nn.Conv2d(input_channels, 32, kernel_size=3, stride=1, padding=1)
-        self.lif1 = snn.Leaky(beta=beta, init_hidden=True)
-        self.pool = nn.MaxPool2d(2, 2)
-        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1)
-        self.lif2 = snn.Leaky(beta=beta, init_hidden=True)
-
-        # Compute the size after convolution and pooling layers
-        size_after_conv1 = input_size  # Since padding=1, stride=1, kernel_size=3
-        size_after_pool1 = size_after_conv1 // 2  # After first pooling
-        size_after_conv2 = size_after_pool1  # Conv layer maintains size
-        size_after_pool2 = size_after_conv2 // 2  # After second pooling
-        final_size = size_after_pool2
-
-        # Define fully connected layers with dynamic input size
-        self.fc1 = nn.Linear(64 * final_size * final_size, 100)
-        self.lif3 = snn.Leaky(beta=beta, init_hidden=True)
-        self.fc2 = nn.Linear(100, output_channels)
-        self.lif4 = snn.Leaky(beta=beta, init_hidden=True)
-
-    def forward(self, x):
-        self.lif1.init_leaky()
-        self.lif2.init_leaky()
-        self.lif3.init_leaky()
-        self.lif4.init_leaky()
-
-        num_steps = x.shape[0]
-        spk_out = []
-        batch_size = x.size(1)
-        not_spiked = torch.ones(batch_size, dtype=torch.bool, device=x.device)
-        for step in range(num_steps):
-            #x_t = x[step].clone()
-            x_t = x[step]
-            x_t[~not_spiked] = 0.0
-            #x_t = x_t * not_spiked.view(-1, 1, 1, 1).float()
-            cur1 = self.conv1(x_t)
-            spk1= self.lif1(cur1)
-            spk1 = self.pool(spk1)
-            cur2 = self.conv2(spk1)
-            spk2 = self.lif2(cur2)
-            spk2 = self.pool(spk2)
-            spk2_flat = spk2.view(spk2.size(0), -1)
-            cur3 = self.fc1(spk2_flat)
-            spk3 = self.lif3(cur3)
-            cur4 = self.fc2(spk3)
-            spk4 = self.lif4(cur4)
-            spk_out.append(spk4)
-            #spiked_now = spk4.sum(dim=1) > 0
-            #newly_spiked = spiked_now & not_spiked
-            newly_spiked = (spk4.sum(dim=1)>0) & not_spiked
-            not_spiked[newly_spiked] = False
-            if not not_spiked.any():
-                for _ in range(step + 1, num_steps):
-                    spk_out.append(torch.zeros_like(spk4))
-                break
-            
-        return torch.stack(spk_out)
-'''
-# ALL IN ONE Model (Deprecated)
-class CNV_SNN(nn.Module):
-    def __init__(self, input_channels=1, output_channels=10, beta=0.95):
-        super(CNV_SNN, self).__init__()
-        # Convolutional layers
-        self.conv1 = nn.Conv2d(input_channels, 32, kernel_size=3, stride=1, padding=1)
-        self.lif1 = snn.Leaky(beta=beta, init_hidden=True)
-        
-        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1)
-        self.lif2 = snn.Leaky(beta=beta, init_hidden=True)
-        
-        # Fully connected layers
-        self.fc1 = nn.Linear(64 * 7 * 7, 100)
-        self.lif3 = snn.Leaky(beta=beta, init_hidden=True)
-        
-        self.fc2 = nn.Linear(100, output_channels)
-        self.lif4 = snn.Leaky(beta=beta, init_hidden=True)
-        
-        # Max pooling
-        self.pool = nn.MaxPool2d(2, 2)
-
-    def forward(self, x, num_steps, early_stopping=False, propagate_zero=False):
-        # Initialize hidden states
-        self.lif1.init_leaky()
-        self.lif2.init_leaky()
-        self.lif3.init_leaky()
-        self.lif4.init_leaky()
-
-        # Number of time steps
-        num_steps = x.shape[0]
-
-        # Lists to store outputs
-        spk_out = []
-        #mem_out = []
-        if early_stopping and not self.training:
-            batch_size = x.size(1)
-            not_spiked = torch.ones(batch_size, dtype=torch.bool, device=x.device)
-            
-            if propagate_zero:
-                for step in range(num_steps):
-                    # Current input
-                    x_t = x[step]
-
-                    # Zero out inputs for samples that have already spiked
-                    x_t = x_t.clone()
-                    x_t[~not_spiked] = 0.0
-
-                    # Layer 1
-                    cur1 = self.conv1(x_t)
-                    spk1= self.lif1(cur1)
-                    spk1 = self.pool(spk1)
-
-                    # Layer 2
-                    cur2 = self.conv2(spk1)
-                    spk2 = self.lif2(cur2)
-                    spk2 = self.pool(spk2)
-
-                    # Flatten
-                    spk2_flat = spk2.view(spk2.size(0), -1)
-
-                    # Layer 3
-                    cur3 = self.fc1(spk2_flat)
-                    spk3 = self.lif3(cur3)
-
-                    # Layer 4
-                    cur4 = self.fc2(spk3)
-                    spk4 = self.lif4(cur4)
-
-                    # Collect spikes
-                    spk_out.append(spk4)
-                    
-                    # Check if any output neuron spiked for each sample
-                    spiked_now = spk4.sum(dim=1) > 0  # Boolean tensor of shape [batch_size]
-                    # Identify samples that spiked in this time step and haven't spiked before
-                    newly_spiked = spiked_now & not_spiked
-                    # Update the not_spiked mask
-                    not_spiked[newly_spiked] = False
-
-                    # If all samples have spiked, break the loop
-                    if not not_spiked.any():
-                        for _ in range(step + 1, num_steps):
-                            spk_out.append(torch.zeros_like(spk4))
-                        break
-
-            else: # Propagate zero is False
-                for step in range(num_steps):
-                    # Current input
-                    x_t = x[step]
-
-                    # Layer 1
-                    cur1 = self.conv1(x_t)
-                    spk1= self.lif1(cur1)
-                    spk1 = self.pool(spk1)
-
-                    # Layer 2
-                    cur2 = self.conv2(spk1)
-                    spk2 = self.lif2(cur2)
-                    spk2 = self.pool(spk2)
-
-                    # Flatten
-                    spk2_flat = spk2.view(spk2.size(0), -1)
-
-                    # Layer 3
-                    cur3 = self.fc1(spk2_flat)
-                    spk3 = self.lif3(cur3)
-
-                    # Layer 4
-                    cur4 = self.fc2(spk3)
-                    spk4 = self.lif4(cur4)
-
-                    # Collect spikes
-                    spk_out.append(spk4)
-
-                    # Update not_spiked and spike_times
-                    # spk4 is of shape [batch_size, num_classes]
-                    # Check if any output neuron spiked for each sample
-                    spiked_now = spk4.sum(dim=1) > 0  # Boolean tensor of shape [batch_size]
-                    # Identify samples that spiked in this time step and haven't spiked before
-                    newly_spiked = spiked_now & not_spiked
-                    # Update the not_spiked mask
-                    not_spiked[newly_spiked] = False
-
-                    # If all samples have spiked, break the loop
-                    if not not_spiked.any():
-                        for _ in range(step + 1, num_steps):
-                            spk_out.append(torch.zeros_like(spk4))
-                        break
-
-        else: # latency coding's train & No option
-            for step in range(num_steps):
-                # Current input
-                x_t = x[step]
-
-                # Layer 1
-                cur1 = self.conv1(x_t)
-                spk1= self.lif1(cur1)
-                spk1 = self.pool(spk1)
-
-                # Layer 2
-                cur2 = self.conv2(spk1)
-                spk2 = self.lif2(cur2)
-                spk2 = self.pool(spk2)
-
-                # Flatten
-                spk2_flat = spk2.view(spk2.size(0), -1)
-
-                # Layer 3
-                cur3 = self.fc1(spk2_flat)
-                spk3 = self.lif3(cur3)
-
-                # Layer 4
-                cur4 = self.fc2(spk3)
-                spk4 = self.lif4(cur4)
-
-                # Collect spikes
-                spk_out.append(spk4)
-            
-        return torch.stack(spk_out)
-'''
-
 def get_classification_metrics(labels: list, predictions: list, average=None) -> tuple:
     
     return (
@@ -484,7 +106,7 @@ def snn_training_loop(args, paths, model, train_loader, device, scheduler, optim
             optimizer.zero_grad()
             
             # 순전파
-            inputs = spikegen.latency(inputs, tau=0.1, num_steps=args.steps)
+            inputs = spikegen.latency(inputs, tau=args.tau, num_steps=args.steps)
             outputs = model(inputs)
             
             # 손실 계산
@@ -531,7 +153,38 @@ def snn_training_loop(args, paths, model, train_loader, device, scheduler, optim
         print(f'Load model state at best epoch loss [{best_epoch_idx}]')
     model.load_state_dict(best_model_state)
 
-def snn_evaluation(args, paths, model, test_loader, device):
+def snn_evaluation(args, paths, model, test_loader, device, channels, weight=None):
+    if args.early_termination:
+        if weight is None: # weight is on model
+            weight = model.state_dict()
+        if args.model == 'simple':
+            if args.early_termination:
+                model = simple_model.earlyTTFS(channels.input, channels.output, args.beta, channels.size)
+            #model = simple_model.defaultTTFS(channels.input, channels.output, args.beta, channels.size)
+        elif args.model == 'complex':
+            if args.early_termination:
+                model = complex_model.earlyTTFS(channels.input, channels.output, args.beta, channels.size)
+            #model = complex_model.defaultTTFS(channels.input, channels.output, args.beta, channels.size)
+        elif args.model == 'reference' and channels.input==1 and channels.output==10 and channels.size==28: # Suitable for MNIST
+            if args.early_termination:
+                model = reference_model.earlyTTFS(args.beta)
+            #model = reference_model.defaultTTFS(args.beta)
+        else:
+            raise ValueError('Invalid model type')
+        model.load_state_dict(weight)
+        model = model.to(device)
+    elif model is None:
+        if args.model == 'simple':
+            model = simple_model.defaultTTFS(channels.input, channels.output, args.beta, channels.size)
+        elif args.model == 'complex':
+            model = complex_model.defaultTTFS(channels.input, channels.output, args.beta, channels.size)
+        elif args.model == 'reference' and channels.input==1 and channels.output==10 and channels.size==28: # Suitable for MNIST
+            model = reference_model.defaultTTFS(args.beta)
+        else:
+            raise ValueError('Invalid model type')
+        model.load_state_dict(weight)
+        model = model.to(device)
+    
     start_time = time.time()
     model.eval()
     all_labels = []
@@ -541,7 +194,7 @@ def snn_evaluation(args, paths, model, test_loader, device):
             inputs, labels = inputs.to(device), labels.to(device)
             
             # 모델에 데이터 전달
-            inputs = spikegen.latency(inputs, tau=0.1, num_steps=args.steps)
+            inputs = spikegen.latency(inputs, tau=args.tau, num_steps=args.steps)
             output = model(inputs)
             all_labels.extend(labels.cpu().numpy())
             # Compute spike times
@@ -552,6 +205,7 @@ def snn_evaluation(args, paths, model, test_loader, device):
             # Predict the class with the earliest spike
             predicted = torch.argmin(spk_times, dim=1)
             all_predictions.extend(predicted.cpu().numpy())
+    end_time = time.time()
 
     visualize_confusion_matrix(pilot=False, all_labels=all_labels, all_predictions=all_predictions, num_classes=10, path=paths.accuracy)
 
@@ -565,9 +219,9 @@ def snn_evaluation(args, paths, model, test_loader, device):
         'steps': args.steps,
         'epoch': args.epoch,
         'batch_size': args.batch_size,
-        'latency_early_stopping': args.latency_early_stopping,
+        'early_termination': args.early_termination,
         'latency_propagate_zero': args.latency_propagate_zero,
-        'execution_time': time.time() - start_time
+        'execution_time': end_time - start_time
     }
     save_record_to_csv(paths.accuracy_summary_csv, accuracy_summary_record)
     print(f"Execution time: {accuracy_summary_record['execution_time']} seconds")
@@ -575,15 +229,14 @@ def snn_evaluation(args, paths, model, test_loader, device):
 def snn_train_pipeline(args, paths, device, train_loader, test_loader, channels):
     train_time = time.time()
     # Hyperparameter
-    if args.latency_early_stopping and args.latency_propagate_zero:
-        model = earlyzeroTTFS(channels.input, channels.output, args.beta, channels.size)
-    elif args.latency_propagate_zero:
-        model = zeroTTFS(channels.input, channels.output, args.beta, channels.size)
-    elif args.latency_early_stopping:
-        model = earlyTTFS(channels.input, channels.output, args.beta, channels.size)
+    if args.model == 'simple':
+        model = simple_model.defaultTTFS(channels.input, channels.output, args.beta, channels.size)
+    elif args.model == 'complex':
+        model = complex_model.defaultTTFS(channels.input, channels.output, args.beta, channels.size)
+    elif args.model == 'reference' and channels.input==1 and channels.output==10 and channels.size==28:
+        model = reference_model.defaultTTFS(args.beta)
     else:
-        model = defaultTTFS(channels.input, channels.output, args.beta, channels.size)
-    #model = CNV_SNN(channels.input, channels.output)
+        raise ValueError('Invalid model type')
     model = model.to(device)
     criterion = SF.ce_temporal_loss()
     optimizer = optim.Adam(model.parameters(), lr=5e-4, betas=(0.9, 0.999))
@@ -600,7 +253,7 @@ def snn_train_pipeline(args, paths, device, train_loader, test_loader, channels)
 
     # Test loop (evaluation)
     #test_time = time.time()
-    snn_evaluation(args, paths, model, test_loader, device)
+    snn_evaluation(args, paths, model, test_loader, device, channels)
     #print(f"{time.time()-test_time} second at testing encoding")
 
     return model
@@ -618,6 +271,7 @@ def main(args, paths):
         torch.device("cuda") if torch.cuda.is_available() else
         torch.device("cpu")
     )
+    print(f"Device: {device}")
     
     if ( args.dataset_type == 'mnist' ):
         transform = transforms.Compose([transforms.ToTensor()])
@@ -630,6 +284,16 @@ def main(args, paths):
                                        transform=transform,
                                        download=True)
         #channels = SimpleNamespace(input=1, output=10)
+    elif (args.dataset_type=='fashionmnist'):
+        transform = transforms.Compose([transforms.ToTensor()])
+        ref_train_dataset = datasets.FashionMNIST(root=paths.dataset,
+                                        train=True,
+                                        transform=transform,
+                                        download=True)
+        ref_test_dataset = datasets.FashionMNIST(root=paths.dataset,
+                                        train=False,
+                                        transform=transform,
+                                        download=True)
     elif( args.dataset_type == 'cifar10' ):
         transform = transforms.Compose([
             transforms.ToTensor(),
@@ -682,22 +346,10 @@ def main(args, paths):
     ## 1. Train SNN
     print_verbose(args.verbose, "1. Train SNN is on way")
     if args.pretrained is not None:
-        if args.latency_early_stopping and args.latency_propagate_zero:
-            model = earlyzeroTTFS(channels.input, channels.output, args.beta, channels.size)
-        elif args.latency_propagate_zero:
-            model = zeroTTFS(channels.input, channels.output, args.beta, channels.size)
-        elif args.latency_early_stopping:
-            model = earlyTTFS(channels.input, channels.output, args.beta, channels.size)
-        else:
-            model = defaultTTFS(channels.input, channels.output, args.beta, channels.size)
-        #model = CNV_SNN(channels.input, channels.output)
-        model.load_state_dict(torch.load(args.pretrained, map_location=device))
-        model = model.to(device)
-        if args.verbose:
-            print("###Sanity Check###")
-            eval_time = time.time()
-            snn_evaluation(args, paths, model, test_loader, device)
-            print(f"{time.time()-eval_time} second at test")
+        print("###Sanity Check###")
+        eval_time = time.time()
+        snn_evaluation(args, paths, None, test_loader, device, channels, torch.load(args.pretrained, map_location=device))
+        print(f"{time.time()-eval_time} second at test")
     else:
         model = snn_train_pipeline(args, paths, device, train_loader, test_loader, channels)
 
@@ -739,12 +391,14 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     # Command-line arguments
-    parser.add_argument('-d', '--dataset_type', type=str, default='mnist', choices=['mnist','cifar10','cifar100'], help="Type of a dataset to use. (Default: mnist)")
+    parser.add_argument('-d', '--dataset_type', type=str, default='mnist', choices=['mnist','fashionmnist','cifar10','cifar100'], help="Type of a dataset to use. (Default: mnist)")
+    parser.add_argument('--model', type=str, default='simple', choices=['simple', 'complex', 'reference'], help="Type of a model to use. (Default: simple)")
     parser.add_argument('--training_dataset_ratio', type=restricted_float, default=1.0, help="Set a specific ratio of training dataset. (Default: 1.0)") 
     parser.add_argument('--test_dataset_ratio', type=restricted_float, default=1.0, help="Set a specific ratio of test dataset. (Default: 1.0)")
     parser.add_argument('-b', '--batch_size', type=int, default=64, help="Size of a batch. (Default: 64)")
     parser.add_argument('-e', '--epoch', type=int, default=100, help="Size of an epoch. (Default: 10)")
     parser.add_argument('--beta', type=restricted_float, default=0.95, help="Beta value for Leaky Integrate-and-Fire neuron. (Default: 0.95)")
+    parser.add_argument('--tau', type=float, default=0.1, help="Tau value for SNN spike encoding. (Default: 0.1)")
     parser.add_argument('--lr_scheduler', action='store_true', default=False, help="Applying LR Scheduling method. (Default: False)")
     parser.add_argument('--steps', type=int, default=10, help="Number of steps in SNN spike encoding. Must be greater than 1. (Default: 10)")
     parser.add_argument('--single_gpu', type=int, default=None, help="Enable singleGPU mode with GPU index. Disable to use parallel GPU or CPU(when GPU is unavailable). (Default: None)")
@@ -753,7 +407,7 @@ if __name__ == "__main__":
     parser.add_argument('--path_result_accuracy', type=str, default=PATH_RESULT_ACCURACY)
     parser.add_argument('--path_result_meta', type=str, default=PATH_RESULT_META)
     parser.add_argument('--pretrained', type=str, default=None, help="Pretrained latency encoding weights path (Default: None)")
-    parser.add_argument('--latency_early_stopping', action='store_true', default=False, help="Apply early stopping at latency model. (Default: False)")
+    parser.add_argument('--early_termination', action='store_true', default=False, help="Apply early stopping at latency model. (Default: False)")
     parser.add_argument('--latency_propagate_zero', action='store_true', default=False, help="Propagate zero at latency model. (Default: False)")
     parser.add_argument('--verbose', action='store_true', default=False, help="Enable verbose mode. (Default: False)")
     parser.add_argument('--notes', type=str, default=None)

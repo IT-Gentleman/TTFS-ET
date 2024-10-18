@@ -1,0 +1,101 @@
+Command,Total Energy (J)
+python evaluation.py -d mnist --batch_size 64 --steps 8 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/265_model_mnist_latency.weights --model simple,146.19165352272987
+python evaluation.py -d mnist --batch_size 64 --steps 8 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/265_model_mnist_latency.weights --model simple,104.69618602466583
+python evaluation.py -d mnist --batch_size 64 --steps 8 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/266_model_mnist_latency.weights --model smlp78440010,66.58121077299118
+python evaluation.py -d mnist --batch_size 64 --steps 8 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/266_model_mnist_latency.weights --model smlp78440010,66.14738996672631
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_simple.weights --model simple,225.4431124660969
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_simple.weights --model simple,140.71394404554368
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_scnn_b128.weights --model scnn,150.23024442195893
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_scnn_b128.weights --model scnn,136.01464569234847
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/236_model_fashionmnist_latency.weights --model smlp78440040010,93.36898154067993
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/236_model_fashionmnist_latency.weights --model smlp78440040010,91.90678101706504
+python evaluation.py -d mnist --batch_size 64 --steps 8 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/265_model_mnist_latency.weights --model simple,141.41423589229584
+python evaluation.py -d mnist --batch_size 64 --steps 8 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/265_model_mnist_latency.weights --model simple,105.28349087619782
+python evaluation.py -d mnist --batch_size 64 --steps 8 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/266_model_mnist_latency.weights --model smlp78440010,66.77309212470054
+python evaluation.py -d mnist --batch_size 64 --steps 8 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/266_model_mnist_latency.weights --model smlp78440010,66.93853052043914
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_simple.weights --model simple,224.87270002913476
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_simple.weights --model simple,140.6906011929512
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_scnn_b128.weights --model scnn,155.17303896188736
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_scnn_b128.weights --model scnn,140.82129200696946
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/236_model_fashionmnist_latency.weights --model smlp78440040010,92.99411121559143
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/236_model_fashionmnist_latency.weights --model smlp78440040010,92.48084097361564
+python evaluation.py -d mnist --batch_size 64 --steps 8 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/265_model_mnist_latency.weights --model simple,142.41663451337814
+python evaluation.py -d mnist --batch_size 64 --steps 8 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/265_model_mnist_latency.weights --model simple,105.48524639487266
+python evaluation.py -d mnist --batch_size 64 --steps 8 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/266_model_mnist_latency.weights --model smlp78440010,66.85644819951058
+python evaluation.py -d mnist --batch_size 64 --steps 8 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/266_model_mnist_latency.weights --model smlp78440010,62.67041016149521
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_simple.weights --model simple,224.69281639933587
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_simple.weights --model simple,141.10818006825448
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_scnn_b128.weights --model scnn,150.26578065538408
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_scnn_b128.weights --model scnn,140.08855142712594
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/236_model_fashionmnist_latency.weights --model smlp78440040010,93.083325299263
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/236_model_fashionmnist_latency.weights --model smlp78440040010,92.09376986312866
+python evaluation.py -d mnist --batch_size 64 --steps 8 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/265_model_mnist_latency.weights --model simple,140.832908087492
+python evaluation.py -d mnist --batch_size 64 --steps 8 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/265_model_mnist_latency.weights --model simple,105.18920434832573
+python evaluation.py -d mnist --batch_size 64 --steps 8 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/266_model_mnist_latency.weights --model smlp78440010,66.91773858833314
+python evaluation.py -d mnist --batch_size 64 --steps 8 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/266_model_mnist_latency.weights --model smlp78440010,66.32749508857727
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_simple.weights --model simple,224.92634171819688
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_simple.weights --model simple,140.84699197936058
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_scnn_b128.weights --model scnn,150.47708821296692
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_scnn_b128.weights --model scnn,140.2056317896843
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/236_model_fashionmnist_latency.weights --model smlp78440040010,92.53894553112984
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/236_model_fashionmnist_latency.weights --model smlp78440040010,92.40114962768554
+python evaluation.py -d mnist --batch_size 64 --steps 8 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/265_model_mnist_latency.weights --model simple,140.80775801348688
+python evaluation.py -d mnist --batch_size 64 --steps 8 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/265_model_mnist_latency.weights --model simple,105.30218939876556
+python evaluation.py -d mnist --batch_size 64 --steps 8 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/266_model_mnist_latency.weights --model smlp78440010,66.88928684020043
+python evaluation.py -d mnist --batch_size 64 --steps 8 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/266_model_mnist_latency.weights --model smlp78440010,62.3565815486908
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_simple.weights --model simple,224.97053304743767
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_simple.weights --model simple,141.14621850419044
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_scnn_b128.weights --model scnn,150.60879880547523
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_scnn_b128.weights --model scnn,139.99939951205255
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/236_model_fashionmnist_latency.weights --model smlp78440040010,92.93988227725029
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/236_model_fashionmnist_latency.weights --model smlp78440040010,92.29660229730607
+python evaluation.py -d mnist --batch_size 64 --steps 8 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/265_model_mnist_latency.weights --model simple,141.53155998444558
+python evaluation.py -d mnist --batch_size 64 --steps 8 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/265_model_mnist_latency.weights --model simple,102.01249315738679
+python evaluation.py -d mnist --batch_size 64 --steps 8 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/266_model_mnist_latency.weights --model smlp78440010,66.80425802493096
+python evaluation.py -d mnist --batch_size 64 --steps 8 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/266_model_mnist_latency.weights --model smlp78440010,66.45441012978554
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_simple.weights --model simple,225.35994819259645
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_simple.weights --model simple,140.64906881332396
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_scnn_b128.weights --model scnn,150.55002415823935
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_scnn_b128.weights --model scnn,140.1022147064209
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/236_model_fashionmnist_latency.weights --model smlp78440040010,92.82779400157928
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/236_model_fashionmnist_latency.weights --model smlp78440040010,88.50358741521835
+python evaluation.py -d mnist --batch_size 64 --steps 8 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/265_model_mnist_latency.weights --model simple,141.35310341143608
+python evaluation.py -d mnist --batch_size 64 --steps 8 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/265_model_mnist_latency.weights --model simple,105.99452213215828
+python evaluation.py -d mnist --batch_size 64 --steps 8 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/266_model_mnist_latency.weights --model smlp78440010,67.42381210255623
+python evaluation.py -d mnist --batch_size 64 --steps 8 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/266_model_mnist_latency.weights --model smlp78440010,66.30016647076607
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_simple.weights --model simple,225.9990344438553
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_simple.weights --model simple,140.8094657049179
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_scnn_b128.weights --model scnn,146.13961819815637
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_scnn_b128.weights --model scnn,135.94061378908157
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/236_model_fashionmnist_latency.weights --model smlp78440040010,93.11267746043205
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/236_model_fashionmnist_latency.weights --model smlp78440040010,92.19750381660461
+python evaluation.py -d mnist --batch_size 64 --steps 8 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/265_model_mnist_latency.weights --model simple,140.90301096010208
+python evaluation.py -d mnist --batch_size 64 --steps 8 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/265_model_mnist_latency.weights --model simple,105.43077126693726
+python evaluation.py -d mnist --batch_size 64 --steps 8 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/266_model_mnist_latency.weights --model smlp78440010,67.2702653272152
+python evaluation.py -d mnist --batch_size 64 --steps 8 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/266_model_mnist_latency.weights --model smlp78440010,66.55116904091835
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_simple.weights --model simple,224.7297013156414
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_simple.weights --model simple,141.22612939023972
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_scnn_b128.weights --model scnn,149.99385665249824
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_scnn_b128.weights --model scnn,140.12087380218506
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/236_model_fashionmnist_latency.weights --model smlp78440040010,93.0953133289814
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/236_model_fashionmnist_latency.weights --model smlp78440040010,88.41181050419807
+python evaluation.py -d mnist --batch_size 64 --steps 8 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/265_model_mnist_latency.weights --model simple,141.14681511449814
+python evaluation.py -d mnist --batch_size 64 --steps 8 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/265_model_mnist_latency.weights --model simple,105.81932696199416
+python evaluation.py -d mnist --batch_size 64 --steps 8 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/266_model_mnist_latency.weights --model smlp78440010,66.98723323130608
+python evaluation.py -d mnist --batch_size 64 --steps 8 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/266_model_mnist_latency.weights --model smlp78440010,62.833187808036804
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_simple.weights --model simple,225.17271862220764
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_simple.weights --model simple,141.6212661640644
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_scnn_b128.weights --model scnn,150.02832987928392
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_scnn_b128.weights --model scnn,140.36577216482164
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/236_model_fashionmnist_latency.weights --model smlp78440040010,93.25493307757378
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/236_model_fashionmnist_latency.weights --model smlp78440040010,88.12195444154739
+python evaluation.py -d mnist --batch_size 64 --steps 8 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/265_model_mnist_latency.weights --model simple,141.66323916196822
+python evaluation.py -d mnist --batch_size 64 --steps 8 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/265_model_mnist_latency.weights --model simple,105.29042371463775
+python evaluation.py -d mnist --batch_size 64 --steps 8 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/266_model_mnist_latency.weights --model smlp78440010,66.94122017145156
+python evaluation.py -d mnist --batch_size 64 --steps 8 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/266_model_mnist_latency.weights --model smlp78440010,66.50411609148979
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_simple.weights --model simple,224.09753518056868
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_simple.weights --model simple,141.42368373703957
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_scnn_b128.weights --model scnn,154.9292944688797
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/fashionmnist_scnn_b128.weights --model scnn,140.12705374908447
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/236_model_fashionmnist_latency.weights --model smlp78440040010,92.87835938310623
+python evaluation.py -d fashionmnist --batch_size 64 --steps 16 --early_termination --pretrained /home/mwkim/TTFS-ET/experiment/ref_model/236_model_fashionmnist_latency.weights --model smlp78440040010,92.32564282798766

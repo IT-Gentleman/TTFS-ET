@@ -1,0 +1,22 @@
+dataset_type: fashionmnist
+model: smlp78440040010
+training_dataset_ratio: 1.0
+test_dataset_ratio: 1.0
+batch_size: 64
+epoch: 100
+beta: 0.95
+tau: 0.1
+lr_scheduler: False
+steps: 16
+single_gpu: None
+path_dataset: /home/mwkim/TTFS-ET/dataset/
+path_result_model: /home/mwkim/TTFS-ET/result/model/
+path_result_accuracy: /home/mwkim/TTFS-ET/result/accuracy/
+path_result_meta: /home/mwkim/TTFS-ET/result/meta/
+pretrained: /home/mwkim/TTFS-ET/experiment/ref_model/236_model_fashionmnist_latency.weights
+early_termination: False
+verbose: False
+notes: None
+
+status: SUCCESS
+Total elapsed time: 11.982196 s

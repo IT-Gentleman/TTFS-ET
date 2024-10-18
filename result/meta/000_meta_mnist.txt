@@ -1,22 +1,22 @@
 dataset_type: mnist
+model: simple
 training_dataset_ratio: 1.0
 test_dataset_ratio: 1.0
 batch_size: 64
-epoch: 10
+epoch: 100
+beta: 0.95
+tau: 0.1
 lr_scheduler: False
-steps: 10
-single_gpu: 1
-path_dataset: /home/mwkim/jupyter/root/F-TTFS/dataset/
-path_result_image: /home/mwkim/jupyter/root/F-TTFS/result/image/
-path_result_model: /home/mwkim/jupyter/root/F-TTFS/result/model/
-path_result_loss: /home/mwkim/jupyter/root/F-TTFS/result/loss/
-path_result_accuracy: /home/mwkim/jupyter/root/F-TTFS/result/accuracy/
-path_result_meta: /home/mwkim/jupyter/root/F-TTFS/result/meta/
-pretrained: None
-latency_early_stopping: False
-latency_propagate_zero: False
-verbose: True
+steps: 8
+single_gpu: None
+path_dataset: /home/mwkim/TTFS-ET/dataset/
+path_result_model: /home/mwkim/TTFS-ET/result/model/
+path_result_accuracy: /home/mwkim/TTFS-ET/result/accuracy/
+path_result_meta: /home/mwkim/TTFS-ET/result/meta/
+pretrained: /home/mwkim/TTFS-ET/experiment/ref_model/265_model_mnist_latency.weights
+early_termination: False
+verbose: False
 notes: None
 
 status: SUCCESS
-Total elapsed time: 1423.799308 s
+Total elapsed time: 13.236151 s

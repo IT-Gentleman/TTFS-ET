@@ -98,7 +98,7 @@ def snn_training_loop(args, paths, model, train_loader, device, scheduler, optim
             
             # 순전파
             inputs = spikegen.latency(inputs, tau=args.tau, num_steps=args.steps)
-            outputs, _ = model(inputs)
+            outputs = model(inputs)
             
             # 손실 계산
             loss = criterion(outputs, labels)

@@ -1,5 +1,3 @@
 dataset/
 model/__pycache__/
 experiment/__pycache__/
-experiment/ref_model/meta/
-experiment/ref_model/non_used/
